@@ -25,6 +25,7 @@ public class Mybatis1 {
 		//查询一个，其中参数一表示User.xml文件中select标签中的id，参数二表示要传入的参数，在本例中是id
 		User user = session.selectOne("test.findUserById", 1);//前面加上了命名空间
 		System.out.println(user);
+		session.close();
 	} 
 	@Test
 	public void selectUsersByName() throws IOException{
@@ -38,5 +39,21 @@ public class Mybatis1 {
 		//查询集合，其中参数一表示User.xml文件中select标签中的id，参数二表示要传入的参数，在本例中是id
 		List<User> user = session.selectList("test.findUsersByName", "五");//前面加上了命名空间
 		System.out.println(user);
+		session.close();
 	} 
+	@Test
+	public void insertUser() throws IOException{
+		String resource = "SqlMapConfig.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSession session = sessionFactory.openSession();//创建session对象的同时也会打开事务
+		
+		User user = new User();
+		user.setUsername("张三");
+		user.setSex("1");
+		session.insert("insertUser", user);
+		System.out.println(user.getId());
+		session.commit();
+		session.close();
+	}
 }

@@ -23,4 +23,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="findUsersByName" parameterType="java.lang.String" resultType="domain.User">
 		SELECT * FROM user WHERE username LIKE '%${value}%'
 	</select>
+	<!-- 插入数据 
+		由于插入的是对象，所以类型为domain.user
+		其中#{username}就表示的是user中的username属性，这是OGNL表达式
+	-->
+	<insert id="insertUser" parameterType="domain.User">
+		<!--  返回主键，在执行了insert语句之后会执行该标签下的语句，改函数是mysql中的函数，用来返回最近一次插入数据的id
+			order:表示该语句在Insert之前还是之后执行
+		-->
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO user(username,sex,birthday,address) VALUES(#{username},#{sex},#{birthday},#{address})
+	</insert>
 </mapper>
