@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间现在可以任意 -->
+<mapper namespace="test">
+	<!-- 查询语句的标签，select表示一个MappedStatement
+		id:statement的唯一标识
+		#{}表示一个占位符?
+		#{id}id表示参数名称，当参数类型是简单类型时，名称可以任意
+		parameterType:表示参数的类型
+		resultType:查询所得结果的类型
+	 -->
+	<select id="findUserById" parameterType="int" resultType="domain.User">
+		SELECT * FROM user WHERE id=#{id}
+	</select>
+	<!-- 模糊查询 -->
+	<!-- 
+		其中用到的${}可以理解为sql的连接符
+		${value}:value表示输入参数的名称，当输入参数为简单类型时，${}中的名称必须为value
+		${}存在sql注入的问题，它会将传入的参数不作任何解释原样输出，而#{}会对参数进行解释，比如，如果为String，会加上''
+	 -->
+	<select id="findUsersByName" parameterType="java.lang.String" resultType="domain.User">
+		SELECT * FROM user WHERE username LIKE '%${value}%'
+	</select>
+</mapper>
