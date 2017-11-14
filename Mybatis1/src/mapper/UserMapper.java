@@ -3,6 +3,7 @@ package mapper;
 import java.util.List;
 
 import domain.User;
+import domain.UserVO;
 
 public interface UserMapper {
 	// 根据id查找用户
@@ -13,4 +14,7 @@ public interface UserMapper {
 
 	// 插入用户
 	public void insertUser(User user);
+	
+	//查询用户列表
+	public List<User> findUserList(UserVO userVO) throws Exception;
 }

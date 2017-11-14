@@ -3,21 +3,29 @@
 PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+	<properties resource="db.properties"></properties><!-- 利用properties配置加载连接数据库用到的信息 -->
+	<typeAliases>
+		<!-- 单个别名定义 -->
+<!-- 		<typeAlias type="domain.User" alias="user"/> -->
+		<!-- 批量别名定义，将domain包下的全部类名都定义别名  默认别名为类名，大小写都可-->
+		<package name="domain"/>
+	</typeAliases>
 	<environments default="development">
 		<environment id="development">
 			<!-- 配置事务 -->
 			<transactionManager type="JDBC"></transactionManager>
 			<!-- 配置数据源，用来连接数据库，采用Mybatis自带的连接池 -->
 			<dataSource type="POOLED">
-				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="driver" value="${db.driver}"/>
 				<property name="url" value="jdbc:mysql://localhost:3306/mybatis?useUnicode=true&amp;characterEncoding=utf8"/>
-				<property name="username" value="root"/>
-				<property name="password" value="090936"/>
+				<property name="username" value="${db.username}"/>
+				<property name="password" value="${db.password}"/>
 			</dataSource>
 		</environment>
 	</environments>
 <mappers>
-	<mapper resource="User.xml"/>
-	<mapper resource="mapper/UserMapper.xml"/>
+	<mapper resource="User.xml"/><!-- 加载单个文件 -->
+<!-- 	<mapper resource="mapper/UserMapper.xml"/> -->
+	<package name="mapper"/><!-- 加载包下所有的映射文件 -->
 </mappers>
 </configuration>
