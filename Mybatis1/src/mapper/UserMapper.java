@@ -17,4 +17,9 @@ public interface UserMapper {
 	
 	//查询用户列表
 	public List<User> findUserList(UserVO userVO) throws Exception;
+	
+	//查询用户数量
+	public int findUserCount(UserVO userVO) throws Exception;
+	//测试resultMap
+	public User findUserMap(int id) throws Exception;
 }

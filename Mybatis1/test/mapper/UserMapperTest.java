@@ -50,4 +50,28 @@ public class UserMapperTest {
 		System.out.println(user1);
 		session.close();
 	}
+	@Test
+	public void testfindUserCount() throws Exception {
+		SqlSession session = sessionFactory.openSession();
+		UserMapper mapper = session.getMapper(UserMapper.class);// 得到Mapper对象
+		
+		UserVO userVO = new UserVO();
+		User user = new User();
+		user.setUsername("小");
+		user.setSex("1");
+		userVO.setUser(user);//传入user
+		
+		int count = mapper.findUserCount(userVO);
+		System.out.println(count);
+		session.close();
+	}
+	@Test
+	public void testfindUserMap() throws Exception {
+		SqlSession session = sessionFactory.openSession();
+		UserMapper mapper = session.getMapper(UserMapper.class);// 得到Mapper对象
+	
+		User user = mapper.findUserMap(1);
+		System.out.println(user);
+		session.close();
+	}
 }
