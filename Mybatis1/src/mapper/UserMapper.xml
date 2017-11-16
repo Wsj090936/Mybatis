@@ -4,39 +4,79 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 命名空间要和mapper类一致 -->
 <mapper namespace="mapper.UserMapper">
-	<!-- 注意id要和UserMapper接口中的方法名一致，parameterType类型要和参数类型一致 ，返回值要和方法的返回值一致-->
+	<!-- 注意id要和UserMapper接口中的方法名一致，parameterType类型要和参数类型一致 ，返回值要和方法的返回值一致 -->
 	<select id="findUserById" parameterType="int" resultType="domain.User">
-		SELECT * FROM user WHERE id=#{id}
+		SELECT
+		* FROM user WHERE id=#{id}
 	</select>
 
-	<select id="findUsersByName" parameterType="java.lang.String" resultType="domain.User">
+	<select id="findUsersByName" parameterType="java.lang.String"
+		resultType="domain.User">
 		SELECT * FROM user WHERE username LIKE '%${value}%'
 	</select>
 
 	<insert id="insertUser" parameterType="domain.User">
-		<!--  返回主键，在执行了insert语句之后会执行该标签下的语句，改函数是mysql中的函数，用来返回最近一次插入数据的id
-			order:表示该语句在Insert之前还是之后执行
-		-->
+		<!-- 返回主键，在执行了insert语句之后会执行该标签下的语句，改函数是mysql中的函数，用来返回最近一次插入数据的id order:表示该语句在Insert之前还是之后执行 -->
 		<selectKey keyProperty="id" resultType="int" order="AFTER">
-			SELECT LAST_INSERT_ID()
+			SELECT
+			LAST_INSERT_ID()
 		</selectKey>
-		INSERT INTO user(username,sex,birthday,address) VALUES(#{username},#{sex},#{birthday},#{address})
+		INSERT INTO user(username,sex,birthday,address)
+		VALUES(#{username},#{sex},#{birthday},#{address})
 	</insert>
-	<select id="findUserList" parameterType="domain.UserVO" resultType="domain.User">
-		SELECT * FROM user WHERE username LIKE '%${user.username}%' AND sex=#{user.sex}
-	</select>
+
+	<!-- 声明sql片段 -->
+	<sql id="whereA">
+		<if test="user != null">
+			<if test="user.username != null and user.username != ''"><!-- if标签，判断输入的参数 -->
+				AND username LIKE '%${user.username}%'
+			</if>
+			<if test="user.sex != null and user.sex != ''">
+				AND sex=#{user.sex}
+			</if>
+		</if>
+		<if test="idList != null">
+			AND id IN
+			<!-- foreach语句 
+				collection:对象中的集合属性的名称
+				item:遍历出的结果的变量
+				open:遍历开始时的字符串
+				close:遍历结束时的字符串
+				separator::遍历中间拼接的字符串,例子如下：
+			AND id IN(#{id},#{id}.#{id})
+			-->
+			<foreach collection="idList" item="id" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+		</if>
+	</sql>
 	
-	<select id="findUserCount" parameterType="domain.UserVO" resultType="int">
-		SELECT count(*) FROM user WHERE username LIKE '%${user.username}%' AND sex=#{user.sex}
+	<select id="findUserList" parameterType="domain.UserVO"
+		resultType="domain.User">
+		SELECT * FROM user
+		<!-- WHERE username LIKE '%${user.username}%' AND sex=#{user.sex} -->
+		<where><!-- where 标签，如果有参数输入，就将后面第一个AND干掉，然后拼接自己 -->
+			<include refid="whereA"></include><!-- 引用sql片段 -->
+		</where>
+	</select>
+
+	<select id="findUserCount" parameterType="domain.UserVO"
+		resultType="int">
+		SELECT count(*) FROM user
+		 <!-- WHERE username LIKE '%${user.username}%' AND sex=#{user.sex} -->
+		 <where>
+		 	<include refid="whereA"></include>
+		 </where>
 	</select>
 	<!-- resultMap -->
 	<!-- type:表示Map集合映射的pojo类型，id唯一标识该集合 -->
 	<resultMap type="domain.User" id="UserMap">
-		<id column="id_" property="id"/><!-- 此列为主键列，column表示列的别名，property表示pojo对象的属性名 -->
-		<result column="username_" property="username"/><!-- 普通列 -->
-		<result column="sex_" property="sex"/>
+		<id column="id_" property="id" /><!-- 此列为主键列，column表示列的别名，property表示pojo对象的属性名 -->
+		<result column="username_" property="username" /><!-- 普通列 -->
+		<result column="sex_" property="sex" />
 	</resultMap>
 	<select id="findUserMap" parameterType="int" resultMap="UserMap">
-		SELECT id id_,username username_,sex sex_ FROM user WHERE id=#{id}
+		SELECT id
+		id_,username username_,sex sex_ FROM user WHERE id=#{id}
 	</select>
 </mapper>

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -41,11 +42,16 @@ public class UserMapperTest {
 		UserMapper mapper = session.getMapper(UserMapper.class);// 得到Mapper对象
 		
 		UserVO userVO = new UserVO();
-		User user = new User();
-		user.setUsername("小");
+//		User user = new User();
+/*		user.setUsername("小");
 		user.setSex("1");
 		userVO.setUser(user);//传入user
-		
+*/		
+		List<Integer> idList = new ArrayList<>();
+		idList.add(1);
+		idList.add(2);
+		idList.add(3);
+		userVO.setIdList(idList);
 		List<User> user1 = mapper.findUserList(userVO);
 		System.out.println(user1);
 		session.close();
