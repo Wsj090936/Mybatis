@@ -4,17 +4,71 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 命名空间要和mapper类一致 -->
 <mapper namespace="mapper.OrdersMapper">
-<!-- 利用resultType进行查询 -->
+	<!-- 利用resultType进行查询 -->
 	<select id="findOrdersAndUser" resultType="domain.OrdersExt">
+		SELECT
+		orders.`id`,
+		orders.`user_id`,
+		orders.`number`,
+		user.`username`,
+		user.`sex`
+		FROM
+		USER,
+		orders
+		WHERE orders.`user_id` = user.`id`;
+	</select>
+	<!-- 利用resultMap进行查询 -->
+	<resultMap type="domain.OrdersExt" id="OrdersAndUserMap">
+		<id column="id" property="id" />
+		<result column="number" property="number" />
+		<result column="user_id" property="userId" />
+		<!--asspciation 一对一映射 property属性:关联查询时的结果映射的扩展类中的对象属性 -->
+		<association property="user" javaType="domain.User">
+			<id column="user_id" property="id" /><!-- 映射user中的id -->
+			<result column="username" property="username" /><!-- 映射user中的username -->
+			<result column="sex" property="sex" />
+		</association>
+	</resultMap>
+	<select id="findOrdersAndUserMap" resultMap="OrdersAndUserMap">
+		SELECT
+		orders.`id`,
+		orders.`user_id`,
+		orders.`number`,
+		user.`username`,
+		user.`sex`
+		FROM
+		USER,
+		orders
+		WHERE orders.`user_id` = user.`id`;
+	</select>
+	<!-- 多对多映射的查询 -->
+	<!-- resultMap标签中的extends属性可以用来继承其他resultMap，要求这两个resultMap的类型相同 -->
+	<resultMap type="domain.OrdersExt" id="OrdersAndUserWithDetail"
+		extends="OrdersAndUserMap">
+		<!-- 用户信息和订单信息已经继承过来 -->
+		<!-- 订单明细 -->
+		<!-- collection标签用来配置一对多关系 ofType:扩展类中的集合中的类型(集合中存放的是一对多中 多的那方) -->
+		<collection property="detailList" ofType="domain.Orderdetail">
+			<id column="detailId" property="id"/><!-- 和一对一中的配置类似 -->
+			<result column="items_id" property="itemsId"/>
+			<result column="items_num" property="itemsNum"/>
+		</collection>
+	</resultMap>
+	<select id="findOrdersAndUserWithDetail" resultMap="OrdersAndUserWithDetail">
 		SELECT
 			orders.`id`,
 			orders.`user_id`,
 			orders.`number`,
 			user.`username`,
-			user.`sex`
+			user.`sex`,
+			orderdetail.`id` detailId,
+			orderdetail.`items_id`,
+			orderdetail.`items_num`
 		FROM
 			USER,
-			orders
-		WHERE orders.`user_id` = user.`id`;
+			orders,
+			orderdetail
+		WHERE orders.`user_id` = user.`id` AND orders.`id` =
+			orderdetail.`orders_id`;
 	</select>
 </mapper>

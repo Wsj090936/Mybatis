@@ -28,5 +28,19 @@ public class OrdersMapperTest {
 		List<OrdersExt> list = mapper.findOrdersAndUser();
 		session.close();
 	}
+	@Test
+	public void testFindOrdersAndUserMap() {
+		SqlSession session = sessionFactory.openSession();
+		OrdersMapper mapper = session.getMapper(OrdersMapper.class);
+		List<OrdersExt> list = mapper.findOrdersAndUserMap();
+		session.close();
+	}
+	@Test
+	public void testFindOrdersAndUserWithDetailMap() {
+		SqlSession session = sessionFactory.openSession();
+		OrdersMapper mapper = session.getMapper(OrdersMapper.class);
+		List<OrdersExt> list = mapper.findOrdersAndUserWithDetail();
+		session.close();
+	}
 
 }
