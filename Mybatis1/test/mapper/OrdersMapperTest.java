@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import domain.OrdersExt;
+import domain.User;
 
 public class OrdersMapperTest {
 	private SqlSessionFactory sessionFactory;
@@ -40,6 +41,13 @@ public class OrdersMapperTest {
 		SqlSession session = sessionFactory.openSession();
 		OrdersMapper mapper = session.getMapper(OrdersMapper.class);
 		List<OrdersExt> list = mapper.findOrdersAndUserWithDetail();
+		session.close();
+	}
+	@Test
+	public void testFindUserAndInformation() {
+		SqlSession session = sessionFactory.openSession();
+		OrdersMapper mapper = session.getMapper(OrdersMapper.class);
+		List<User> list = mapper.findUserAndInformation();
 		session.close();
 	}
 

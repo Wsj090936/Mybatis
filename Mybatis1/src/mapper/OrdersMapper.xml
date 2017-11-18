@@ -49,9 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<!-- 订单明细 -->
 		<!-- collection标签用来配置一对多关系 ofType:扩展类中的集合中的类型(集合中存放的是一对多中 多的那方) -->
 		<collection property="detailList" ofType="domain.Orderdetail">
-			<id column="detailId" property="id"/><!-- 和一对一中的配置类似 -->
-			<result column="items_id" property="itemsId"/>
-			<result column="items_num" property="itemsNum"/>
+			<id column="detailId" property="id" /><!-- 和一对一中的配置类似 -->
+			<result column="items_id" property="itemsId" />
+			<result column="items_num" property="itemsNum" />
 		</collection>
 	</resultMap>
 	<select id="findOrdersAndUserWithDetail" resultMap="OrdersAndUserWithDetail">
@@ -70,5 +70,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			orderdetail
 		WHERE orders.`user_id` = user.`id` AND orders.`id` =
 			orderdetail.`orders_id`;
+	</select>
+	<!-- 多对多查询 -->
+	<resultMap type="domain.User" id="UserAndInformation">
+		<!-- 用户信息 -->
+		<id column="user_id" property="id"/>
+		<result column="username" property="username"/>
+		<result column="sex" property="sex"/>
+		<!-- 订单信息(一对多) -->
+			<collection property="ordersList" ofType="domain.Orders">
+				<id column="id" property="id"/>
+				<result column="user_id" property="userId"/>
+				<result column="number" property="number"/>
+				<!-- 订单明细(一对多) -->
+				<collection property="orderdetailList" ofType="domain.Orderdetail">
+					<id column="detailId" property="id"/>
+					<result column="items_id" property="itemsId"/>
+					<result column="items_num" property="itemsNum"/>
+					<!-- 商品信息(一对一) -->
+					<association property="items" javaType="domain.Items">
+						<id column="items_id" property="id"/>
+						<result column="name" property="name"/>
+						<result column="price" property="price"/>
+					</association>
+				</collection>
+			</collection>
+	</resultMap>
+	<select id="findUserAndInformation" resultMap="UserAndInformation">
+		SELECT
+			orders.`id`,
+			orders.`user_id`,
+			orders.`number`,
+			user.`username`,
+			user.`sex`,
+			orderdetail.`id` detailId,
+			orderdetail.`items_id`,
+			orderdetail.`items_num`,
+			items.`name`,
+			items.`price`
+		FROM
+			USER,
+			orders,
+			orderdetail,
+			items
+		WHERE orders.`user_id` = user.`id`
+			AND orders.`id` = orderdetail.`orders_id`
+			AND orderdetail.`items_id` = items.`id`;
 	</select>
 </mapper>

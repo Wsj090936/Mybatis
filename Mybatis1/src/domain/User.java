@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.Date;
+import java.util.List;
 /**
  * 用户类，对应数据库中的user表
  * @author wushijia
@@ -12,6 +13,16 @@ public class User {
 	private String sex;
 	private Date birthday;
 	private String address;
+	
+	//订单类(一对多关系)
+	private List<Orders> ordersList;
+	
+	public List<Orders> getOrdersList() {
+		return ordersList;
+	}
+	public void setOrdersList(List<Orders> ordersList) {
+		this.ordersList = ordersList;
+	}
 	public Integer getId() {
 		return id;
 	}

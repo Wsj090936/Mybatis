@@ -14,6 +14,16 @@ public class Orders {
 
     private String note;
     
+    //订单明细列表(一对多)
+    private List<Orderdetail> orderdetailList;
+    
+	public List<Orderdetail> getOrderdetailList() {
+		return orderdetailList;
+	}
+
+	public void setOrderdetailList(List<Orderdetail> orderdetailList) {
+		this.orderdetailList = orderdetailList;
+	}
 
 	public Integer getId() {
         return id;
