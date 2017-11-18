@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间要和mapper类一致 -->
+<mapper namespace="mapper.OrdersMapper">
+<!-- 利用resultType进行查询 -->
+	<select id="findOrdersAndUser" resultType="domain.OrdersExt">
+		SELECT
+			orders.`id`,
+			orders.`user_id`,
+			orders.`number`,
+			user.`username`,
+			user.`sex`
+		FROM
+			USER,
+			orders
+		WHERE orders.`user_id` = user.`id`;
+	</select>
+</mapper>
