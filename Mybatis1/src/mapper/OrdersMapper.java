@@ -14,4 +14,6 @@ public interface OrdersMapper {
 	public List<OrdersExt> findOrdersAndUserWithDetail();
 	//多对多
 	public List<User> findUserAndInformation();
+	//延迟加载
+	public List<OrdersExt> findOrdersAndUserByLazyLoading();
 }

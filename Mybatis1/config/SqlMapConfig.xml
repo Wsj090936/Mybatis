@@ -4,6 +4,13 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<properties resource="db.properties"></properties><!-- 利用properties配置加载连接数据库用到的信息 -->
+	<!-- 延迟加载 -->
+	<settings>
+		<!-- 开启延迟加载，默认值为true -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<!-- 设置积极懒加载，默认值为true -->
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
 	<typeAliases>
 		<!-- 单个别名定义 -->
 <!-- 		<typeAlias type="domain.User" alias="user"/> -->

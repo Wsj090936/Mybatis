@@ -50,5 +50,24 @@ public class OrdersMapperTest {
 		List<User> list = mapper.findUserAndInformation();
 		session.close();
 	}
-
+	@Test
+	public void testLazyLoading() {
+		SqlSession session = sessionFactory.openSession();
+		OrdersMapper mapper = session.getMapper(OrdersMapper.class);
+		List<OrdersExt> list = mapper.findOrdersAndUserByLazyLoading();
+		for (OrdersExt order : list) {
+			System.out.println(order.getUser());
+		}
+		session.close();
+	}
+	@Test
+	public void levelOneCache() throws Exception{
+		SqlSession session = sessionFactory.openSession();
+		UserMapper mapper = session.getMapper(UserMapper.class);
+		User user = mapper.findUserById(1);
+		System.out.println(user);
+		User user2 = mapper.findUserById(1);
+		System.out.println(user2);
+	}
+	
 }

@@ -117,4 +117,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND orders.`id` = orderdetail.`orders_id`
 			AND orderdetail.`items_id` = items.`id`;
 	</select>
+	<!-- 延迟加载 -->
+	<resultMap type="domain.OrdersExt" id="LazingLoadingMap">
+		<id column="id" property="id"/>
+		<result column="number" property="number"/>
+		<!-- association中的
+			select属性：关联查询的statement的id，可从其他文件中获取
+			column属性：表示查询出的结果中的某一列的列名，将该列中的属性作为参数传入关联查询的statement中
+		 -->
+		<association property="user" select="mapper.UserMapper.findUserById" column="user_id"></association>
+	</resultMap>
+	<select id="findOrdersAndUserByLazyLoading" resultMap="LazingLoadingMap">
+		SELECT
+			*
+		FROM
+			orders
+	</select>
 </mapper>

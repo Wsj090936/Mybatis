@@ -2,6 +2,7 @@ package mapper;
 
 import java.util.List;
 
+import domain.OrdersExt;
 import domain.User;
 import domain.UserVO;
 
@@ -22,4 +23,5 @@ public interface UserMapper {
 	public int findUserCount(UserVO userVO) throws Exception;
 	//≤‚ ‘resultMap
 	public User findUserMap(int id) throws Exception;
+
 }
