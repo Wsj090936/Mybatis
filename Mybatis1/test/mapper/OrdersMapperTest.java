@@ -69,5 +69,25 @@ public class OrdersMapperTest {
 		User user2 = mapper.findUserById(1);
 		System.out.println(user2);
 	}
+	@Test
+	public void levelTwoCache() throws Exception{
+		SqlSession session = sessionFactory.openSession();
+		SqlSession session2 = sessionFactory.openSession();
+		SqlSession session3 = sessionFactory.openSession();
+		
+		UserMapper mapper = session.getMapper(UserMapper.class);
+		UserMapper mapper2 = session2.getMapper(UserMapper.class);
+		UserMapper mapper3 = session3.getMapper(UserMapper.class);
+		
+		User user = mapper.findUserById(1);//命中率0
+		session.close();
+		
+//		mapper2.insertUser(user);//执行这两条语句会清空一级缓存，从而二级缓存也清空
+//		session2.commit();
+		mapper2.findUserById(1);//缓存命中率0.5
+		session2.close();
+		User user3 = mapper3.findUserById(1);//缓存命中率0.666666
+		session3.close();
+	}
 	
 }

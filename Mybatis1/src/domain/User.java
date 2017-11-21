@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * @author wushijia
  *
  */
-public class User {
+public class User implements Serializable{
 	private Integer id;
 	private String username;
 	private String sex;

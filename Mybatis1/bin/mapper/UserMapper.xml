@@ -4,6 +4,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 命名空间要和mapper类一致 -->
 <mapper namespace="mapper.UserMapper">
+<!--  在Mapper文件中开启二级缓存-->
+	<cache/>
 	<!-- 注意id要和UserMapper接口中的方法名一致，parameterType类型要和参数类型一致 ，返回值要和方法的返回值一致 -->
 	<select id="findUserById" parameterType="int" resultType="domain.User">
 		SELECT
